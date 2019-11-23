@@ -25,6 +25,8 @@ class Repuesto {
         cantidad min: 1
     }
 
+    static belongsTo = [detalleCompra: DetalleCompraRepuesto]
+
 
     // Método que desdobla un repuesto con cantidad > 1 en dos repuestos (cada uno con su cantidad)
     // Sirve, por ejemplo, para cuando se tiene un repuesto con cantidad 100 en una ubicación (e.g., tuercas) y se
@@ -38,6 +40,13 @@ class Repuesto {
     }
 
     void reservarParaOT(Integer cantidad, OrdenDeTrabajo ot) {
+
+        // TODO: Setear estado RESERVADO
+
+        // TODO: Setear ordenDeTrabajo
+    }
+
+    boolean estaVencido() {
 
         // TODO: Setear estado RESERVADO
 

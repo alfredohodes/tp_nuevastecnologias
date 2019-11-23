@@ -3,7 +3,7 @@ package aerorep
 @groovy.transform.ToString
 class Dinero {
 
-    final BigDecimal monto
+    BigDecimal monto
 
     Dinero(BigDecimal monto) {
 

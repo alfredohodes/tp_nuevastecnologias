@@ -2,8 +2,9 @@ package aerorep
 
 class RequerimientoRepuesto {
 
-    final TipoRepuesto tipoRepuesto
-    final Integer cantidad
+    TipoRepuesto tipoRepuesto
+    Integer cantidad
+    static belongsTo = [ot: OrdenDeTrabajo]
 
     static constraints = {
         tipoRepuesto nullable: false

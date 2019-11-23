@@ -2,13 +2,13 @@ package aerorep
 
 class TipoRepuesto {
 
-    String name
+    String nombre
     Integer cantidadAlertaStockMinimo
 
     static hasMany = [repuestos: Repuesto]
     
     static constraints = {
-        name(nullable: false, blank: false)
+        nombre(nullable: false, blank: false)
     }
 
     void reservarParaOT(Integer cantidad, OrdenDeTrabajo ot) {
