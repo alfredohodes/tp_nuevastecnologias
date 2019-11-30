@@ -3,7 +3,7 @@ package aerorep
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class RepuestoSpec extends Specification implements DomainUnitTest<Repuesto> {
+class DisponibilidadRepuestoSpec extends Specification implements DomainUnitTest<Repuesto> {
 
     def setup() {
     }

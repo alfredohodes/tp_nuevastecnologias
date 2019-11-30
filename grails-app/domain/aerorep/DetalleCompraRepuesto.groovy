@@ -1,16 +1,17 @@
 package aerorep
 
 class DetalleCompraRepuesto {
+  
+  Dinero precio
+  static embedded = ['precio']
 
-    Dinero precio
-    static embedded = ['precio']
+  static belongsTo = [compra: CompraRepuesto]
 
-    static belongsTo = [compra: CompraRepuesto]
+  static hasMany = [
+    repuestos: DisponibilidadRepuesto,
+  ]
 
-    static hasMany = [
-     repuestos: Repuesto,
-   ]
-
-    static constraints = {
-    }
+  static constraints = {
+  }
+  
 }

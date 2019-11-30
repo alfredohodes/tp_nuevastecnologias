@@ -2,14 +2,12 @@ package aerorep
 
 class OrdenDeTrabajo {
 
-   static hasMany = [
-     requerimientoRepuestos: RequerimientoRepuesto,
-     repuestosReservados: Repuesto,
-   ]
+    static hasMany = [
+        requerimientoRepuestos: RequerimientoRepuesto,
+    ]
 
     enum Estado {
-        EN_PREPARACION,
-        PREPARADA,
+        NO_EJECUTADA,
         EJECUTADA
     }
     Estado estado
@@ -17,20 +15,11 @@ class OrdenDeTrabajo {
     static constraints = {
     }
 
-    void reservarRepuesto(Repuesto repuesto) {
+    void reservarRepuestosRequeridos() {
 
-        // TODO: Si no hay un requerimiento para este repuesto -> Exception
+        // TODO: Iterar por todos los RequerimientoRepuesto y buscarYReservarRepuestos()
 
-        // TODO: Agregar el repuesto a la lista de repuestos reservados.
-
-        // TODO: Si al agregar este repuesto puedeSerEjecutada() -> setear estado PREPARADA
-    }
-
-    void quitarReservaRepuesto(Repuesto repuesto) {
-
-        // TODO: Quitar el repuesto de la lista de repuestos asignados.
-
-        // TODO: Setear estado EN_PREPARACION
+        // TODO: Si al finalizar puedeSerEjecutada() -> setear estado PREPARADA
     }
 
     boolean puedeSerEjecutada() {
