@@ -1,5 +1,6 @@
 package aerorep
 
+//@groovy.transform.ToString
 class DisponibilidadRepuesto {
 
     TipoRepuesto tipo
@@ -8,6 +9,7 @@ class DisponibilidadRepuesto {
     static embedded = ['ubicacion']
     
     Integer cantidad
+    Integer cantidadReservada = 0
 
     String numeroDeSerie
     String lote

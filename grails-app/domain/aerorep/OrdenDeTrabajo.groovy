@@ -1,7 +1,9 @@
 package aerorep
 
+//@groovy.transform.ToString(excludes='requerimientoRepuestos')
 class OrdenDeTrabajo {
 
+    Set<RequerimientoRepuesto> requerimientoRepuestos = []
     static hasMany = [
         requerimientoRepuestos: RequerimientoRepuesto,
     ]
@@ -10,7 +12,7 @@ class OrdenDeTrabajo {
         NO_EJECUTADA,
         EJECUTADA
     }
-    Estado estado
+    Estado estado = Estado.NO_EJECUTADA
 
     static constraints = {
     }
@@ -18,8 +20,6 @@ class OrdenDeTrabajo {
     void reservarRepuestosRequeridos() {
 
         // TODO: Iterar por todos los RequerimientoRepuesto y buscarYReservarRepuestos()
-
-        // TODO: Si al finalizar puedeSerEjecutada() -> setear estado PREPARADA
     }
 
     boolean puedeSerEjecutada() {

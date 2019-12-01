@@ -1,14 +1,15 @@
 package aerorep
 
+//@groovy.transform.ToString(excludes='detalles')
 class CompraRepuesto {
 
     Date fecha
     ProveedorRepuesto proveedor
 
-
-   static hasMany = [
-     detalles: DetalleCompraRepuesto,
-   ]
+    Set<DetalleCompraRepuesto> detalles = []
+    static hasMany = [
+      detalles: DetalleCompraRepuesto,
+    ]
 
     static constraints = {
     }

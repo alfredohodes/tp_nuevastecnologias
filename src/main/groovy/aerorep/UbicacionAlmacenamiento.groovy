@@ -8,6 +8,13 @@ class UbicacionAlmacenamiento {
     String estanteria
     String espacio
 
+    UbicacionAlmacenamiento() {
+        this.deposito   = ""
+        this.zona       = ""
+        this.estanteria = ""
+        this.espacio    = ""
+    }
+
     UbicacionAlmacenamiento(String deposito, String zona, String estanteria, String espacio) {
         this.deposito   = deposito
         this.zona       = zona

@@ -1,5 +1,6 @@
 package aerorep
 
+//@groovy.transform.ToString
 class ProveedorRepuesto {
 
     String cuit

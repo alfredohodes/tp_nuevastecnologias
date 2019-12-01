@@ -1,15 +1,17 @@
 package aerorep
 
+//@groovy.transform.ToString(excludes='repuestos,compra')
 class DetalleCompraRepuesto {
-  
-  Dinero precio
+
+  Dinero precio = new Dinero(0)
   static embedded = ['precio']
 
-  static belongsTo = [compra: CompraRepuesto]
-
+  Set<DisponibilidadRepuesto> repuestos = []
   static hasMany = [
     repuestos: DisponibilidadRepuesto,
   ]
+  
+  static belongsTo = [compra: CompraRepuesto]
 
   static constraints = {
   }

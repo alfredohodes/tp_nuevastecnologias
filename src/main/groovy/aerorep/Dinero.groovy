@@ -5,6 +5,10 @@ class Dinero {
 
     BigDecimal monto
 
+    Dinero() {
+      this.monto = 0
+    }
+
     Dinero(BigDecimal monto) {
 
         if (monto < 0) throw new IllegalArgumentException("El monto tiene que ser mayor o igual a 0")

@@ -11,8 +11,8 @@ class OrdenDeTrabajoSpec extends Specification implements DomainUnitTest<OrdenDe
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
+    // void "test something"() {
+    //     expect:"fix me"
+    //         true == false
+    // }
 }
