@@ -21,9 +21,30 @@ class DisponibilidadRepuesto {
         cantidad min: 1
     }
 
+    void reservar(Integer cantidadAReservar)
+    {
+        if(cantidadAReservar > getCantidadDisponible()) throw new IllegalArgumentException("intentando reservar más cantidad que lo disponible")
+        cantidadReservada += cantidadAReservar
+    }
+
+    void liberar(Integer cantidadALiberar)
+    {
+        if(cantidadALiberar > cantidadReservada()) throw new IllegalArgumentException("intentando liberar más cantidad que lo reservado")
+        cantidadReservada -= cantidadALiberar
+    }
+
     boolean estaVencido() {
         // TODO: Usar un bean de calendario
         false
     }
+
+    Integer getCantidadDisponible()
+    {
+        cantidad - cantidadReservada
+    }
+
+  String toString(){
+    "DisponibilidadRepuesto {$id} -> $tipo.nombre x $cantidad (${cantidad - cantidadReservada} disponibles)"
+  }
 
 }

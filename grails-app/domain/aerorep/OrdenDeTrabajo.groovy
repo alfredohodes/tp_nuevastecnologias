@@ -17,6 +17,26 @@ class OrdenDeTrabajo {
     static constraints = {
     }
 
+    void agregarRequerimiento(RequerimientoRepuesto requerimiento) {
+
+        if(estado ==  Estado.EJECUTADA) throw new IllegalStateException("no se pueden modificar requerimientos en una ot ejecutada")
+
+        // TODO: si existe ya req para cant, reusar. Si no, agregar
+
+        requerimiento.ot = this
+        requerimientoRepuestos << requerimiento
+    }
+
+    void agregarReservaRepuesto(ReservaRepuesto reservaRepuesto) {
+
+        if(estado ==  Estado.EJECUTADA) throw new IllegalStateException("no se pueden modificar requerimientos en una ot ejecutada")
+
+        def requerimiento = requerimientoRepuestos.find{ req -> req.tipo == reservaRepuesto.disponibilidadRepuesto.tipo }
+        if(!requerimiento) throw new IllegalArgumentException("se intenta agregar una reserva de un tipo para el que no hay requerimiento")
+
+        requerimiento.agregarReservaRepuesto(reservaRepuesto)
+    }
+
     void reservarRepuestosRequeridos() {
 
         // TODO: Iterar por todos los RequerimientoRepuesto y buscarYReservarRepuestos()
@@ -42,4 +62,8 @@ class OrdenDeTrabajo {
     {
         // TODO: Calcular el costo de la compra de los repuestos reservados al momento y sumarle el porcentaje de ganancia
     }
+
+  String toString(){
+    "OT {$id} -> $estado"
+  }
 }

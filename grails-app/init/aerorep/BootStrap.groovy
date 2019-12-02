@@ -9,30 +9,31 @@ class BootStrap {
         println  "provTornillos: " + provTornillos
 
         // Tipo repuesto: Tornillo
-        TipoRepuesto tipoRepuestoTornillo = new TipoRepuesto(nombre:"Tornillo", codigo:"TOR-1" + System.currentTimeMillis().toString(), cantidadAlertaStockMinimo:100).save()
-        println "tipoRepuestoTornillo: " + tipoRepuestoTornillo
+        TipoRepuesto tipoTornillo = new TipoRepuesto(nombre:"Tornillo", codigo:"TOR-1" + System.currentTimeMillis().toString(), cantidadAlertaStockMinimo:100).save()
+        println "tipoTornillo: " + tipoTornillo
 
 
         // Compra de 100 tornillos a $2 cada uno, almacenados 70 en ubicación 1 y 30 en ubicación 2
         CompraRepuesto compra = new CompraRepuesto(proveedor:provTornillos, fecha:new Date())
-        DetalleCompraRepuesto detalleTornillos = new DetalleCompraRepuesto(precio:new Dinero(200), compra:compra)
-        DisponibilidadRepuesto disponibilidadTornillos70 = new DisponibilidadRepuesto(tipo:tipoRepuestoTornillo,
+        DetalleCompraRepuesto detalleTornillos = new DetalleCompraRepuesto(precio:new Dinero(200))
+        DisponibilidadRepuesto disponibilidadTornillos70 = new DisponibilidadRepuesto(tipo:tipoTornillo,
                                                                                             ubicacion:new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"),
                                                                                             cantidad:70,
                                                                                             numeroDeSerie:"N/A",
                                                                                             lote:"QWERTYASD",
                                                                                             vencimiento:new Date(System.currentTimeMillis()+30000000000)
                                                                                             ).save()
-        DisponibilidadRepuesto disponibilidadTornillos30 = new DisponibilidadRepuesto(tipo:tipoRepuestoTornillo,
+        DisponibilidadRepuesto disponibilidadTornillos30 = new DisponibilidadRepuesto(tipo:tipoTornillo,
                                                                                             ubicacion:new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 2", espacio:"Esp 2"),
                                                                                             cantidad:30,
                                                                                             numeroDeSerie:"N/A",
                                                                                             lote:"QWERTYASD",
                                                                                             vencimiento:new Date(System.currentTimeMillis()+30000000000)
                                                                                             ).save()
-        detalleTornillos.repuestos << disponibilidadTornillos70
-        detalleTornillos.repuestos << disponibilidadTornillos30
-        compra.detalles << detalleTornillos
+        detalleTornillos.agregarDisponibilidadRepuesto(disponibilidadTornillos70)
+        detalleTornillos.agregarDisponibilidadRepuesto(disponibilidadTornillos30)
+
+        compra.agregarDetalle(detalleTornillos)
 
         compra.save()
 
@@ -45,14 +46,13 @@ class BootStrap {
         // Orden de trabajo previa que requiere 40 tornillos ya reservados de disponibilidad 1
         OrdenDeTrabajo otPrevia = new OrdenDeTrabajo()
 
-        RequerimientoRepuesto reqPrevioTornillos = new RequerimientoRepuesto(tipoRepuesto:tipoRepuestoTornillo, cantidad:40, ot:otPrevia)
-        otPrevia.requerimientoRepuestos << reqPrevioTornillos
-        otPrevia.save()
+        RequerimientoRepuesto reqPrevioTornillos = new RequerimientoRepuesto(tipo:tipoTornillo, cantidad:40)
+        otPrevia.agregarRequerimiento(reqPrevioTornillos)
+        //otPrevia.save()
 
-        ReservaRepuesto reservaPreviaTornillos = new ReservaRepuesto(cantidad:40, disponibilidadRepuesto:disponibilidadTornillos70, requerimiento:reqPrevioTornillos).save()
-        otPrevia.requerimientoRepuestos.reservasRepuestos << reservaPreviaTornillos
-        disponibilidadTornillos70.cantidadReservada += 40
-        reqPrevioTornillos.save()
+        ReservaRepuesto reservaPreviaTornillos = new ReservaRepuesto(cantidad:40, disponibilidadRepuesto:disponibilidadTornillos70)
+        otPrevia.agregarReservaRepuesto(reservaPreviaTornillos)
+        otPrevia.save(flush:true)
 
         println "otPrevia: " + otPrevia
         println "reqPrevioTornillos: " + reqPrevioTornillos
@@ -61,13 +61,15 @@ class BootStrap {
 
         // Orden de trabajo nueva que requiere 50 tornillos
         OrdenDeTrabajo otNueva = new OrdenDeTrabajo()
-        RequerimientoRepuesto reqNuevoTornillos = new RequerimientoRepuesto(tipoRepuesto:tipoRepuestoTornillo, cantidad:50, ot:otNueva)
-        otNueva.requerimientoRepuestos << reqNuevoTornillos
-        otNueva.save()
+
+        RequerimientoRepuesto reqNuevoTornillos = new RequerimientoRepuesto(tipo:tipoTornillo, cantidad:50)
+        otNueva.agregarRequerimiento(reqNuevoTornillos)
+        otNueva.save(flush:true)
 
         println "otNueva: " + otNueva
         println "reqNuevoTornillos: " + reqNuevoTornillos
     }
+    
     def destroy = {
     }
 }

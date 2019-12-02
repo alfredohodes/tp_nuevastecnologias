@@ -9,4 +9,8 @@ class ReservaRepuesto {
 
     static constraints = {
     }
+
+  String toString(){
+    "ReservaRepuesto {$id} -> $disponibilidadRepuesto.tipo.nombre x $cantidad"
+  }
 }

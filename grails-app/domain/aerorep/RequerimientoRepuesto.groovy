@@ -3,7 +3,7 @@ package aerorep
 //@groovy.transform.ToString(excludes='reservasRepuestos,ot')
 class RequerimientoRepuesto {
 
-    TipoRepuesto tipoRepuesto
+    TipoRepuesto tipo
 
     Integer cantidad
 
@@ -15,15 +15,28 @@ class RequerimientoRepuesto {
     ]
 
     static constraints = {
-        tipoRepuesto nullable: false
+        tipo nullable: false
         cantidad min: 1
+    }
+
+    void agregarReservaRepuesto(ReservaRepuesto reserva)
+    {
+        validarReserva(reserva)
+        reservasRepuestos << reserva
+        reserva.requerimiento = this
+    }
+
+    void quitarReservaRepuesto(ReservaRepuesto reserva)
+    {
+        if(ot.estado ==  OrdenDeTrabajo.Estado.EJECUTADA) throw new IllegalStateException("no se pueden quitar reservas en una ot ejecutada")
+        reservasRepuestos -= reserva
     }
 
     void buscarYReservarRepuestos() {
 
         println "Buscando repuestos..."
         
-        def todasLasDisponibilidades = DisponibilidadRepuesto.findAllByTipo(tipoRepuesto, [sort: "vencimiento", order: "asc"])
+        def todasLasDisponibilidades = DisponibilidadRepuesto.findAllByTipo(tipo, [sort: "vencimiento", order: "asc"])
         
         def disponibilidadesNoVencidasConCantidadesNoReservadas = todasLasDisponibilidades.findAll { disp ->
             !disp.estaVencido() && disp.cantidadReservada < disp.cantidad
@@ -61,4 +74,20 @@ class RequerimientoRepuesto {
 
         // TODO: Revisar que no haya repuestos vencidos
     }
+
+    void validarReserva(ReservaRepuesto reserva)
+    {
+        println "Validando reserva..."
+        if(reserva == null) throw new IllegalArgumentException("reserva es null")
+        if(reserva.disponibilidadRepuesto == null) throw new IllegalArgumentException("reserva no tiene disponibilidad asignada")
+        if(reserva.disponibilidadRepuesto.tipo != tipo) throw new IllegalArgumentException("reserva no es del tipo requerido")
+
+        // Validar que no se esté reservando más de lo necesario
+        def cantPendienteAReservar = cantidad - reservasRepuestos.cantidad.sum(0)
+        if(reserva.cantidad > cantPendienteAReservar) throw new IllegalArgumentException("reserva es por una cantidad mayor a la pendiente de reservar")
+    }
+
+  String toString(){
+    "RequerimientoRepuesto {$id} -> $tipo.nombre x $cantidad"
+  }
 }

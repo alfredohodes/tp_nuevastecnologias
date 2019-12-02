@@ -8,4 +8,8 @@ class ProveedorRepuesto {
 
     static constraints = {
     }
+
+    String toString(){
+       "Proveedor {$id} -> " + razonSocial
+    }
 }

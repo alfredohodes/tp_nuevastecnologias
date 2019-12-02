@@ -13,4 +13,13 @@ class CompraRepuesto {
 
     static constraints = {
     }
+
+  void agregarDetalle(DetalleCompraRepuesto detalle) {
+    detalle.compra = this
+    detalles << detalle
+  }
+
+  String toString(){
+    "Compra {$id}"
+  }
 }
