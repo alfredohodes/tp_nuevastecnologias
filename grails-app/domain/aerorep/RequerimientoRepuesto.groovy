@@ -44,21 +44,29 @@ class RequerimientoRepuesto {
         
         disponibilidadesNoVencidasConCantidadesNoReservadas.each { disp ->
             println "disp: $disp || Cant: $disp.cantidad en $disp.ubicacion || Vto: $disp.vencimiento"
-
         }
 
+        def cantPendienteAReservar = cantidad - reservasRepuestos.cantidad.sum(0)
+
         // Inject para ir reservando repuestos disponibles por orden de vencimiento. Acumulo la cant. que resta reservar
-        def cantPendienteAReservar = disponibilidadesNoVencidasConCantidadesNoReservadas.inject(req.cantidad) { cantPendiente, disp ->
+        cantPendienteAReservar = disponibilidadesNoVencidasConCantidadesNoReservadas.inject(cantPendienteAReservar) { cantPendiente, disp ->
             def cantLibreEnDispActual = disp.cantidad - disp.cantidadReservada;
             println "cantLibreEnDispActual: $cantLibreEnDispActual || cantPendiente: $cantPendiente"
             def cantAReservar = [cantLibreEnDispActual, cantPendiente].min()
             println "disp: $disp || Cant: $cantLibreEnDispActual/$disp.cantidad || Pendiente: $cantPendiente || A reservar: $cantAReservar"
             
-            // TODO: Agregar el repuesto a la lista de repuestos reservados.
-            disp.cantidadReservada += 1
-            disp.save(flush:true)
+            if(cantAReservar > 0)
+            {
+                disp.cantidadReservada += cantAReservar
+                disp.save(flush:true)
+
+                agregarReservaRepuesto(new ReservaRepuesto(cantidad:cantAReservar, disponibilidadRepuesto:disp))
+            }
+
             cantPendiente-cantAReservar
         }
+
+        this.save(flush:true)
     }
 
     void quitarReservaRepuestos() {

@@ -38,8 +38,9 @@ class OrdenDeTrabajo {
     }
 
     void reservarRepuestosRequeridos() {
-
-        // TODO: Iterar por todos los RequerimientoRepuesto y buscarYReservarRepuestos()
+        requerimientoRepuestos.each { req ->
+            req.buscarYReservarRepuestos()
+        }
     }
 
     boolean puedeSerEjecutada() {
