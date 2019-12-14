@@ -57,7 +57,7 @@ class RequerimientoRepuesto {
             
             if(cantAReservar > 0)
             {
-                disp.cantidadReservada += cantAReservar
+                disp.reservar(cantAReservar)
                 disp.save(flush:true)
 
                 agregarReservaRepuesto(new ReservaRepuesto(cantidad:cantAReservar, disponibilidadRepuesto:disp))

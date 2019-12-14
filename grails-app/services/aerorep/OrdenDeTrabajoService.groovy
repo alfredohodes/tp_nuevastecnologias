@@ -5,7 +5,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class OrdenDeTrabajoService {
 
-    def prepararOT(OrdenDeTrabajo ot) {
-        ot.preparar()
+    def prepararOT(Long id) {
+        OrdenDeTrabajo.get(id).preparar()
     }
 }

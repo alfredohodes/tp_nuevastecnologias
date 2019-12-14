@@ -1,6 +1,5 @@
 package aerorep
 
-//@groovy.transform.ToString(excludes='requerimientoRepuestos')
 class OrdenDeTrabajo {
 
     Set<RequerimientoRepuesto> requerimientoRepuestos = []
@@ -21,8 +20,6 @@ class OrdenDeTrabajo {
 
         if(estado ==  Estado.EJECUTADA) throw new IllegalStateException("no se pueden modificar requerimientos en una ot ejecutada")
 
-        // TODO: si existe ya req para cant, reusar. Si no, agregar
-
         requerimiento.ot = this
         requerimientoRepuestos << requerimiento
     }
@@ -37,6 +34,9 @@ class OrdenDeTrabajo {
         requerimiento.agregarReservaRepuesto(reservaRepuesto)
     }
 
+    /*
+        Reserva todos los repuestos requeridos para esta OT
+    */
     void preparar() {
         requerimientoRepuestos.each { req ->
             req.buscarYReservarRepuestos()
@@ -44,10 +44,12 @@ class OrdenDeTrabajo {
     }
 
     boolean puedeSerEjecutada() {
-
         requerimientoRepuestos.every { req -> req.estaCumplido() }
     }
 
+    /*
+        Si la OT puede ser ejecutada setea su estado en EJECUTADA y devuelve una lista de repuestos requeridos y sus ubicaciones en el depósito
+    */
     void ejecutar()
     {
         // TODO: Revisar si puedeSerEjecutada(). Si no -> Exception
@@ -57,9 +59,11 @@ class OrdenDeTrabajo {
         // TODO: Devolver lista de repuestos necesarios y sus ubicaciones en el depósito
     } 
 
+    /*
+        El valor de una OT se calcula como el costo total de los repuestos más un porcentaje de ganancia sobre este monto
+    */
     Dinero calcularValor(Float porcentajeGanancia)
     {
-        // TODO: Calcular el costo de la compra de los repuestos reservados al momento y sumarle el porcentaje de ganancia
         Dinero costoRepuestos = requerimientoRepuestos.sum { requerimiento -> 
             requerimiento.reservasRepuestos.sum { reserva -> reserva.calcularPrecioRepuestosReservados() }
         }
@@ -67,7 +71,7 @@ class OrdenDeTrabajo {
         costoRepuestos * (1 + porcentajeGanancia / 100)
     }
 
-  String toString(){
-    "OT {$id} -> $estado"
-  }
+    String toString(){
+        "OT {$id} -> $estado"
+    }
 }
