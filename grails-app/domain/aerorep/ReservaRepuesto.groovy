@@ -10,6 +10,11 @@ class ReservaRepuesto {
     static constraints = {
     }
 
+    Dinero calcularPrecioRepuestosReservados()
+    {
+        disponibilidadRepuesto.getPrecioPorUnidad() * cantidad
+    }
+
   String toString(){
     "ReservaRepuesto {$id} -> $disponibilidadRepuesto.tipo.nombre x $cantidad"
   }

@@ -16,6 +16,11 @@ class DetalleCompraRepuesto {
   static constraints = {
   }
 
+  Dinero getPrecioPorUnidad() {
+    Integer cantTotalRepuestos = repuestos.cantidad.sum()
+    precio / cantTotalRepuestos
+  }
+
   void agregarDisponibilidadRepuesto(DisponibilidadRepuesto repuesto) {
     repuestos << repuesto
   }

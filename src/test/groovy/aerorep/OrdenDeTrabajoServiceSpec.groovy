@@ -6,7 +6,7 @@ import spock.lang.Specification
 
 class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest<OrdenDeTrabajoService>, DataTest {
 
-    void setupSpec() { 
+    def setupSpec() { 
         mockDomain ProveedorRepuesto
         mockDomain TipoRepuesto
         mockDomain CompraRepuesto
@@ -23,75 +23,88 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
         // Tipo repuesto: Tornillo
         new TipoRepuesto(nombre:"Tornillo", codigo:"TOR-1" + System.currentTimeMillis().toString(), cantidadAlertaStockMinimo:100).save()
     }
-    
-    void crearCompra100TornillosEnDosUbicaciones() {
-        
+
+    def crearCompraTornillos(Integer cantidad, Dinero precio, Date vencimiento, String lote, UbicacionAlmacenamiento ubicacion) {
         ProveedorRepuesto provTornillos = ProveedorRepuesto.get(1)
-        
         TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
         
         CompraRepuesto compra = new CompraRepuesto(proveedor:provTornillos, fecha:new Date())
-        DetalleCompraRepuesto detalleTornillos = new DetalleCompraRepuesto(precio:new Dinero(200))
-        DisponibilidadRepuesto disponibilidadTornillos70 = new DisponibilidadRepuesto(tipo:tipoTornillo,
-                                                                                            ubicacion:new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"),
-                                                                                            cantidad:70,
+        DetalleCompraRepuesto detalleTornillos = new DetalleCompraRepuesto(precio: precio)
+        DisponibilidadRepuesto disponibilidadTornillos = new DisponibilidadRepuesto(tipo:tipoTornillo,
+                                                                                            ubicacion:ubicacion,
+                                                                                            cantidad:cantidad,
                                                                                             numeroDeSerie:"N/A",
-                                                                                            lote:"QWERTYASD",
-                                                                                            vencimiento:new Date(System.currentTimeMillis()+10000000000)
+                                                                                            lote:lote,
+                                                                                            vencimiento:vencimiento
                                                                                             ).save()
-        DisponibilidadRepuesto disponibilidadTornillos30 = new DisponibilidadRepuesto(tipo:tipoTornillo,
-                                                                                            ubicacion:new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 2", espacio:"Esp 2"),
-                                                                                            cantidad:30,
-                                                                                            numeroDeSerie:"N/A",
-                                                                                            lote:"QWERTYASD",
-                                                                                            vencimiento:new Date(System.currentTimeMillis()+30000000000)
-                                                                                            ).save()
-        detalleTornillos.agregarDisponibilidadRepuesto(disponibilidadTornillos70)
-        detalleTornillos.agregarDisponibilidadRepuesto(disponibilidadTornillos30)
+        detalleTornillos.agregarDisponibilidadRepuesto(disponibilidadTornillos)
         compra.agregarDetalle(detalleTornillos)
         compra.save()
+        compra
     }
-    
-    void crearOTQueRequiere50Tornillos() {
+
+    def crearOTQueRequiereTornillos(Integer cantTornillosRequeridos) {
         OrdenDeTrabajo ot = new OrdenDeTrabajo()
         TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
-        RequerimientoRepuesto reqNuevoTornillos = new RequerimientoRepuesto(tipo:tipoTornillo, cantidad:50)
+        RequerimientoRepuesto reqNuevoTornillos = new RequerimientoRepuesto(tipo:tipoTornillo, cantidad:cantTornillosRequeridos)
         ot.agregarRequerimiento(reqNuevoTornillos)
         ot.save(flush:true)
+        ot
     }
 
     def cleanup() {
     }
 
-    void "test data inicial uno"() {
+    void "historia 1.1 - reserva con repuestos suficientes"() {
         
-        given: 'Proveedores y compras creados'
-        crearCompra100TornillosEnDosUbicaciones()
-        crearOTQueRequiere50Tornillos()
+        given: 'Hay 100 tornillos disponibles con dos fechas de vencimiento distinta'
+        Date vencimientoPrimero = new Date().plus(30)
+        Date vencimientoSegundo = new Date().plus(60)
+        crearCompraTornillos(50, new Dinero(99.99), vencimientoPrimero, "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+        crearCompraTornillos(50, new Dinero(99.99), vencimientoSegundo, "LOTE-X11", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 2"))
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(10)
 
-        when: 'No pasa nada'
-        def a = 1
-
-        then: 'Están disponibles los 100 tornillos cargados'
-        TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
-        def todasLasDisponibilidades = DisponibilidadRepuesto.findAllByTipo(tipoTornillo)
-        def cantDisponible = todasLasDisponibilidades.inject(0) { cantDisp, disp -> cantDisp + disp.cantidad - disp.cantidadReservada}
-        cantDisponible == 100
-    }
-
-    void "test data inicial dos"() {
-        
-        given: 'Proveedores y compras creados'
-        crearCompra100TornillosEnDosUbicaciones()
-        crearOTQueRequiere50Tornillos()
-
-        when: 'Reserva repuestos'
-        service.reservarRepuestosRequeridos(OrdenDeTrabajo.get(1))
+        when: 'Prepara OT'
+        service.prepararOT(ot)
 
         then: 'Baja la disponibilidad de tornillos'
         TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
         def todasLasDisponibilidades = DisponibilidadRepuesto.findAllByTipo(tipoTornillo)
         def cantDisponible = todasLasDisponibilidades.inject(0) { cantDisp, disp -> cantDisp + disp.cantidad - disp.cantidadReservada}
-        cantDisponible == 50
+        cantDisponible == 90
+
+        and: 'Se reservaron 10 tornillos de la disponibilidad más próxima a vencer'
+        def todasLasDisponibilidadesReservadas = todasLasDisponibilidades.findAll { disp -> disp.cantidadReservada > 0}
+        todasLasDisponibilidadesReservadas.size() == 1
+        todasLasDisponibilidadesReservadas.every { disp -> disp.vencimiento = vencimientoPrimero }
+
+        and: 'La OT puede ser ejecutada'
+        ot.puedeSerEjecutada()
+    }
+
+    void "historia 1.2 - reserva con repuestos insuficientes"() {
+        
+        given: 'Hay 5 tornillos disponibles'
+        crearCompraTornillos(5, new Dinero(99.99), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(10)
+
+        when: 'Prepara OT'
+        service.prepararOT(ot)
+        
+        then: 'La OT no puede ser ejecutada'
+        !ot.puedeSerEjecutada()
+    }
+
+    void "historia 2.1 - reserva con repuestos insuficientes"() {
+        
+        given: 'Se compraron 10 tornillos a 10 pesos cada uno'
+        crearCompraTornillos(10, new Dinero(100), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(10)
+
+        when: 'Prepara OT'
+        service.prepararOT(ot)
+        
+        then: 'El valor de la OT con 30 porciento de ganancia es 130 pesos'
+        ot.calcularValor(30).monto == 130
     }
 }

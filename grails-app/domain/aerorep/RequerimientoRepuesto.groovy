@@ -76,11 +76,15 @@ class RequerimientoRepuesto {
         // TODO: Quitar el repuesto de la lista de repuestos asignados.
     }
 
+    /**
+        Valida que todos los repuestos requeridos estén reservados y que ninguna reserva contenga repuestos vencidos
+    */
     boolean estaCumplido() {
 
-        // TODO: Comparar los repuestos asignados con los requeridos
-
-        // TODO: Revisar que no haya repuestos vencidos
+        def cantPendienteAReservar = cantidad - reservasRepuestos.cantidad.sum(0)
+        def ningunRepuestoVencido = reservasRepuestos.every{ reserva -> !reserva.disponibilidadRepuesto.estaVencido() }
+        
+        cantPendienteAReservar == 0 && ningunRepuestoVencido
     }
 
     void validarReserva(ReservaRepuesto reserva)

@@ -34,13 +34,26 @@ class DisponibilidadRepuesto {
     }
 
     boolean estaVencido() {
-        // TODO: Usar un bean de calendario
-        false
+        vencimiento < new Date()
     }
 
     Integer getCantidadDisponible()
     {
         cantidad - cantidadReservada
+    }
+
+    Dinero getPrecioPorUnidad()
+    {
+        println "getPrecioPorUnidad"
+
+        DetalleCompraRepuesto detalleCompra = DetalleCompraRepuesto.createCriteria().get{
+            repuestos{
+                eq('id', this.id)
+            }
+        }
+        println "detalleCompra $detalleCompra"
+        detalleCompra.getPrecioPorUnidad()
+
     }
 
   String toString(){

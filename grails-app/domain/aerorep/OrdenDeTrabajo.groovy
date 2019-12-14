@@ -37,7 +37,7 @@ class OrdenDeTrabajo {
         requerimiento.agregarReservaRepuesto(reservaRepuesto)
     }
 
-    void reservarRepuestosRequeridos() {
+    void preparar() {
         requerimientoRepuestos.each { req ->
             req.buscarYReservarRepuestos()
         }
@@ -45,9 +45,7 @@ class OrdenDeTrabajo {
 
     boolean puedeSerEjecutada() {
 
-        // TODO: Comparar los repuestos asignados con los requeridos
-
-        // TODO: Revisar que no haya repuestos vencidos
+        requerimientoRepuestos.every { req -> req.estaCumplido() }
     }
 
     void ejecutar()
@@ -62,6 +60,11 @@ class OrdenDeTrabajo {
     Dinero calcularValor(Float porcentajeGanancia)
     {
         // TODO: Calcular el costo de la compra de los repuestos reservados al momento y sumarle el porcentaje de ganancia
+        Dinero costoRepuestos = requerimientoRepuestos.sum { requerimiento -> 
+            requerimiento.reservasRepuestos.sum { reserva -> reserva.calcularPrecioRepuestosReservados() }
+        }
+        
+        costoRepuestos * (1 + porcentajeGanancia / 100)
     }
 
   String toString(){
