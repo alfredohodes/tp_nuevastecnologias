@@ -19,7 +19,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark navbar-static-top" role="navigation">
     <div class="row">
         <div class="col-md-4 col-md-offset-1">
-            <asset:image src="AeroRepLogo.png" class="aerorep-logo"/>
+            <a class="navbar-brand" href="/#">
+                <asset:image src="AeroRepLogo.png" class="aerorep-logo"/>
+            </a>
         </div>
     </div>
 </nav>
