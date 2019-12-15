@@ -32,43 +32,6 @@ class RequerimientoRepuesto {
         reservasRepuestos -= reserva
     }
 
-    void buscarYReservarRepuestos() {
-
-        println "Buscando repuestos..."
-        
-        def todasLasDisponibilidades = DisponibilidadRepuesto.findAllByTipo(tipo, [sort: "vencimiento", order: "asc"])
-        
-        def disponibilidadesNoVencidasConCantidadesNoReservadas = todasLasDisponibilidades.findAll { disp ->
-            !disp.estaVencido() && disp.cantidadReservada < disp.cantidad
-        }
-        
-        disponibilidadesNoVencidasConCantidadesNoReservadas.each { disp ->
-            println "disp: $disp || Cant: $disp.cantidad en $disp.ubicacion || Vto: $disp.vencimiento"
-        }
-
-        def cantPendienteAReservar = cantidad - reservasRepuestos.cantidad.sum(0)
-
-        // Inject para ir reservando repuestos disponibles por orden de vencimiento. Acumulo la cant. que resta reservar
-        cantPendienteAReservar = disponibilidadesNoVencidasConCantidadesNoReservadas.inject(cantPendienteAReservar) { cantPendiente, disp ->
-            def cantLibreEnDispActual = disp.cantidad - disp.cantidadReservada;
-            println "cantLibreEnDispActual: $cantLibreEnDispActual || cantPendiente: $cantPendiente"
-            def cantAReservar = [cantLibreEnDispActual, cantPendiente].min()
-            println "disp: $disp || Cant: $cantLibreEnDispActual/$disp.cantidad || Pendiente: $cantPendiente || A reservar: $cantAReservar"
-            
-            if(cantAReservar > 0)
-            {
-                disp.reservar(cantAReservar)
-                disp.save(flush:true)
-
-                agregarReservaRepuesto(new ReservaRepuesto(cantidad:cantAReservar, disponibilidadRepuesto:disp))
-            }
-
-            cantPendiente-cantAReservar
-        }
-
-        this.save(flush:true)
-    }
-
     void quitarReservaRepuestos() {
 
         // TODO: No permitir si OT tiene estado EJECUTADA
@@ -99,7 +62,12 @@ class RequerimientoRepuesto {
         if(reserva.cantidad > cantPendienteAReservar) throw new IllegalArgumentException("reserva es por una cantidad mayor a la pendiente de reservar")
     }
 
-  String toString(){
+    Integer getCantidadPendienteAReservar() {
+        cantidad - reservasRepuestos.cantidad.sum(0)
+    }
+
+
+  String toString() {
     "RequerimientoRepuesto {$id} -> $tipo.nombre x $cantidad"
   }
 }

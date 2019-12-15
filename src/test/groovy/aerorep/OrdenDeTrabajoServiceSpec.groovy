@@ -4,8 +4,9 @@ import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
+//@Mock(DisponibilidadRepuestoRepository)
 class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest<OrdenDeTrabajoService>, DataTest {
-
+    
     def setupSpec() { 
         mockDomain ProveedorRepuesto
         mockDomain TipoRepuesto
@@ -17,6 +18,8 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
     }
 
     def setup() {
+        service.disponibilidadRepuestoService = new DisponibilidadRepuestoService(disponibilidadRepuestoRepository:new DisponibilidadRepuestoRepository())
+
         // Proveedor de tornillos
         new ProveedorRepuesto(cuit:"11-11111111-0", razonSocial: "VendeTornillo SRL").save()
         
@@ -111,7 +114,7 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
         service.prepararOT(ot.id)
         
         then: 'El valor de la OT con 30 porciento de ganancia es 130 pesos'
-        ot.calcularValor(30).monto == 130
+        service.calcularValorOT(ot.id, 30).monto == 130
     }
 
     void "historia 3.1 - reserva dispara alerta de stock mínimo"() {

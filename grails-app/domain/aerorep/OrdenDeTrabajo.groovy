@@ -34,15 +34,6 @@ class OrdenDeTrabajo {
         requerimiento.agregarReservaRepuesto(reservaRepuesto)
     }
 
-    /*
-        Reserva todos los repuestos requeridos para esta OT
-    */
-    void preparar() {
-        requerimientoRepuestos.each { req ->
-            req.buscarYReservarRepuestos()
-        }
-    }
-
     boolean puedeSerEjecutada() {
         requerimientoRepuestos.every { req -> req.estaCumplido() }
     }
@@ -57,19 +48,8 @@ class OrdenDeTrabajo {
         // TODO: Setear estado EJECUTADA
 
         // TODO: Devolver lista de repuestos necesarios y sus ubicaciones en el depósito
-    } 
-
-    /*
-        El valor de una OT se calcula como el costo total de los repuestos más un porcentaje de ganancia sobre este monto
-    */
-    Dinero calcularValor(Float porcentajeGanancia)
-    {
-        Dinero costoRepuestos = requerimientoRepuestos.sum { requerimiento -> 
-            requerimiento.reservasRepuestos.sum { reserva -> reserva.calcularPrecioRepuestosReservados() }
-        }
-        
-        costoRepuestos * (1 + porcentajeGanancia / 100)
     }
+    
 
     String toString(){
         "OT {$id} -> $estado"

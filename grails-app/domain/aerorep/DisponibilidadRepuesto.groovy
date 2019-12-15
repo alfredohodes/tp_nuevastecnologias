@@ -42,22 +42,8 @@ class DisponibilidadRepuesto {
         cantidad - cantidadReservada
     }
 
-    Dinero getPrecioPorUnidad()
-    {
-        println "getPrecioPorUnidad"
-
-        DetalleCompraRepuesto detalleCompra = DetalleCompraRepuesto.createCriteria().get{
-            repuestos{
-                eq('id', this.id)
-            }
-        }
-        println "detalleCompra $detalleCompra"
-        detalleCompra.getPrecioPorUnidad()
-
+    String toString(){
+        "DisponibilidadRepuesto {$id} -> $tipo.nombre x $cantidad (${cantidad - cantidadReservada} disponibles)"
     }
-
-  String toString(){
-    "DisponibilidadRepuesto {$id} -> $tipo.nombre x $cantidad (${cantidad - cantidadReservada} disponibles)"
-  }
 
 }
