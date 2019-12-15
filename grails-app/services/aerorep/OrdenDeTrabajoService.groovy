@@ -6,6 +6,7 @@ import grails.gorm.transactions.Transactional
 class OrdenDeTrabajoService {
     
     def disponibilidadRepuestoService
+    def ordenDeTrabajoRepository
 
     /*
         Reserva todos los repuestos requeridos para esta OT
@@ -46,5 +47,10 @@ class OrdenDeTrabajoService {
             }
         }
         costoRepuestos * (1 + porcentajeGanancia / 100)
+    }
+
+    def getAllOrdenesDeTrabajo() {
+        println "ordenDeTrabajoRepository $ordenDeTrabajoRepository"
+        ordenDeTrabajoRepository.getAll()
     }
 }

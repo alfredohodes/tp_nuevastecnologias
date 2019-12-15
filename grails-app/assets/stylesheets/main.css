@@ -592,3 +592,16 @@ img.grails-logo {
     height:340px;
     margin-top:-10px;
 }
+
+.aerorep-logo-container {
+    background: #7c7c7c no-repeat 50% 30%;
+    margin-bottom: 20px;
+    color: white;
+    height:200px;
+    text-align:center;
+}
+
+img.aerorep-logo {
+    height:200px;
+    margin-top:-10px;
+}
