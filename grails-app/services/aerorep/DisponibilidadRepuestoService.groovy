@@ -6,18 +6,26 @@ import grails.gorm.transactions.Transactional
 class DisponibilidadRepuestoService {
 
     def disponibilidadRepuestoRepository
+    def notificacionService
 
     def getDisponibilidadesLibresPorTipoOrdenadasPorVencimiento(TipoRepuesto tipo) {
         disponibilidadRepuestoRepository.getAllByTipoOrdenadosPorVencimientoAsc(tipo).findAll { disp ->
-            !disp.estaVencido() && disp.cantidadReservada < disp.cantidad
+            !disp.estaVencido() && disp.getCantidadDisponible() > 0
         }
     }
 
-    def reservar(Long disponibilidadId, Integer cantAReservar) {
-        //TODO: Chequear cant. vs mínimo y enviar alerta
+    def reservar(Long disponibilidadId, Integer cantReserva) {
         DisponibilidadRepuesto disponibilidad = disponibilidadRepuestoRepository.getById(disponibilidadId)
-        disponibilidad.reservar(cantAReservar)
+        disponibilidad.reservar(cantReserva)
         disponibilidad.save(flush:true)
+
+        // Notifica stock minimo
+        Integer cantidadAlertaStockMinimo = disponibilidad.tipo.cantidadAlertaStockMinimo
+        Integer cantidadLibrePostReserva = getCantidadDisponibleLibrePorTipo(disponibilidad.tipo)
+        println "cantidadAlertaStockMinimo $cantidadAlertaStockMinimo - cantidadLibrePostReserva $cantidadLibrePostReserva"
+        if(cantidadLibrePostReserva <= cantidadAlertaStockMinimo && (cantidadLibrePostReserva + cantReserva) > cantidadAlertaStockMinimo) {
+            notificacionService.notificar("Compre, compre")
+        }
     }
 
     Dinero getPrecioPorUnidad(Long disponibilidadId)
@@ -31,7 +39,10 @@ class DisponibilidadRepuestoService {
         detalleCompra.getPrecioPorUnidad()
     }
 
-
-            
-
+    Integer getCantidadDisponibleLibrePorTipo(TipoRepuesto tipo) {
+        getDisponibilidadesLibresPorTipoOrdenadasPorVencimiento(tipo).sum(0) { disponibilidad -> 
+            disponibilidad.getCantidadDisponible()
+        }
+    }
+    
 }

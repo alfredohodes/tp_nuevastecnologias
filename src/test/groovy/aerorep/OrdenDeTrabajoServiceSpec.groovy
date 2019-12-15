@@ -4,7 +4,6 @@ import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-//@Mock(DisponibilidadRepuestoRepository)
 class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest<OrdenDeTrabajoService>, DataTest {
     
     def setupSpec() { 
@@ -18,7 +17,10 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
     }
 
     def setup() {
-        service.disponibilidadRepuestoService = new DisponibilidadRepuestoService(disponibilidadRepuestoRepository:new DisponibilidadRepuestoRepository())
+        service.disponibilidadRepuestoService = new DisponibilidadRepuestoService (
+            disponibilidadRepuestoRepository:new DisponibilidadRepuestoRepository(),
+            notificacionService:new NotificacionService()
+        )
 
         // Proveedor de tornillos
         new ProveedorRepuesto(cuit:"11-11111111-0", razonSocial: "VendeTornillo SRL").save()
@@ -130,6 +132,8 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
         and: 'La OT en preparación requiere 100 tornillos'
         OrdenDeTrabajo ot = crearOTQueRequiereTornillos(100)
 
+        service.disponibilidadRepuestoService.notificacionService = Mock(NotificacionService)
+
         when: 'Prepara OT'
         service.prepararOT(ot.id)
         
@@ -139,6 +143,33 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
         cantDisponible == 950
 
         and: 'Se envió alerta de stock mínimo'
-        true
+        1 * service.disponibilidadRepuestoService.notificacionService.notificar(_)
+    }
+
+    void "historia 3.2 - reserva no dispara alerta de stock mínimo porque ya estaba por debajo"() {
+        
+        given: 'El stock mínimo para alerta de Tornillos es de 1000 unidades'
+        TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
+        tipoTornillo.cantidadAlertaStockMinimo = 1000
+        tipoTornillo.save()
+
+        and: 'Hay 900 tornillos disponibles'
+        crearCompraTornillos(900, new Dinero(9000), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+
+        and: 'La OT en preparación requiere 100 tornillos'
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(100)
+
+        service.disponibilidadRepuestoService.notificacionService = Mock(NotificacionService)
+
+        when: 'Prepara OT'
+        service.prepararOT(ot.id)
+        
+        then: 'La cantidad de tornillos disponible es 800'
+        def todasLasDisponibilidades = DisponibilidadRepuesto.findAllByTipo(tipoTornillo)
+        def cantDisponible = todasLasDisponibilidades.inject(0) { cantDisp, disp -> cantDisp + disp.cantidad - disp.cantidadReservada}
+        cantDisponible == 800
+
+        and: 'No se envió alerta de stock mínimo'
+        0 * service.disponibilidadRepuestoService.notificacionService.notificar(_)
     }
 }
