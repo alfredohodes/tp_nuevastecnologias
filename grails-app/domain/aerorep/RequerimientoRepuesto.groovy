@@ -23,7 +23,7 @@ class RequerimientoRepuesto {
     {
         validarReserva(reserva)
         reservasRepuestos << reserva
-        reserva.requerimiento = this
+        reserva.setRequerimiento(this)
     }
 
     void quitarReservaRepuesto(ReservaRepuesto reserva)

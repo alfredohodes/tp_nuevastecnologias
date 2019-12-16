@@ -17,9 +17,9 @@ class DisponibilidadRepuestoService {
     def reservar(Long disponibilidadId, Integer cantReserva) {
         DisponibilidadRepuesto disponibilidad = disponibilidadRepuestoRepository.getById(disponibilidadId)
         disponibilidad.reservar(cantReserva)
-        disponibilidad.save(flush:true)
+        disponibilidad.save()
 
-        // Notifica stock minimo
+        // Notifica stock mínimo
         Integer cantidadAlertaStockMinimo = disponibilidad.tipo.cantidadAlertaStockMinimo
         Integer cantidadLibrePostReserva = getCantidadDisponibleLibrePorTipo(disponibilidad.tipo)
         println "cantidadAlertaStockMinimo $cantidadAlertaStockMinimo - cantidadLibrePostReserva $cantidadLibrePostReserva"

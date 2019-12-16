@@ -6,8 +6,10 @@ class OrdenDeTrabajoController {
 
     def ordenDeTrabajoService
 
-    def listaOrdenesDeTrabajo() {
-        def ots = ordenDeTrabajoService.getAllOrdenesDeTrabajo()
-        [ots: ots]
+    def prepararOT(Long otId) {
+        println "otID $otId"
+        ordenDeTrabajoService.prepararOT(otId)
+        flash.message = "OT $otId Preparada"
+        redirect(action:'index')
     }
 }

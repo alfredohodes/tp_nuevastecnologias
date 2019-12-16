@@ -7,4 +7,5 @@ beans = {
     }
 
     ordenDeTrabajoRepository(aerorep.OrdenDeTrabajoRepository)
+    disponibilidadRepuestoRepository(aerorep.DisponibilidadRepuestoRepository)
 }

@@ -20,7 +20,7 @@ class OrdenDeTrabajo {
 
         if(estado ==  Estado.EJECUTADA) throw new IllegalStateException("no se pueden modificar requerimientos en una ot ejecutada")
 
-        requerimiento.ot = this
+        requerimiento.setOt(this)
         requerimientoRepuestos << requerimiento
     }
 

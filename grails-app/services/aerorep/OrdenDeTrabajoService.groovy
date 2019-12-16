@@ -18,16 +18,22 @@ class OrdenDeTrabajoService {
             def disponibilidadesNoVencidasConCantidadesNoReservadas = disponibilidadRepuestoService.getDisponibilidadesLibresPorTipoOrdenadasPorVencimiento(requerimiento.tipo)
             
             // Inject para ir reservando repuestos disponibles ordenados por vencimiento. Acumulo la cant. que resta reservar
-            disponibilidadesNoVencidasConCantidadesNoReservadas.inject(requerimiento.getCantidadPendienteAReservar()) { cantPendiente, disponibilidad ->
-                //println "cantLibreEnDispActual: ${disponibilidad.getCantidadDisponible()} || cantPendiente: $cantPendiente"
+            def cantPendienteAReservar = requerimiento.getCantidadPendienteAReservar()
+            println "cantPendienteAReservar $cantPendienteAReservar"
+            disponibilidadesNoVencidasConCantidadesNoReservadas.inject(cantPendienteAReservar) { cantPendiente, disponibilidad ->
+                println "cantLibreEnDispActual: ${disponibilidad.getCantidadDisponible()} || cantPendiente: $cantPendiente"
                 def cantAReservar = [disponibilidad.getCantidadDisponible(), cantPendiente].min()
-                //println "disp: $disponibilidad || Cant: ${disponibilidad.getCantidadDisponible()}/$disponibilidad.cantidad || Pendiente: $cantPendiente || A reservar: $cantAReservar"
+                println "disp: $disponibilidad || Cant: ${disponibilidad.getCantidadDisponible()}/$disponibilidad.cantidad || Pendiente: $cantPendiente || A reservar: $cantAReservar"
                 
                 if(cantAReservar > 0)
                 {
                     disponibilidadRepuestoService.reservar(disponibilidad.id, cantAReservar)
                     requerimiento.agregarReservaRepuesto(new ReservaRepuesto(cantidad:cantAReservar, disponibilidadRepuesto:disponibilidad))
+                    def resultadoDeDispSave = disponibilidad.save(failOnError:true, flush:true)
+                    println "resultadoDeDispSave (1): $resultadoDeDispSave"
                 }
+                println "disp post reserva: $disponibilidad"
+
                 cantPendiente-cantAReservar
             }
         }

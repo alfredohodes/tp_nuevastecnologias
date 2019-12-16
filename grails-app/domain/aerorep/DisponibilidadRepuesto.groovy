@@ -24,13 +24,13 @@ class DisponibilidadRepuesto {
     void reservar(Integer cantidadAReservar)
     {
         if(cantidadAReservar > getCantidadDisponible()) throw new IllegalArgumentException("intentando reservar más cantidad que lo disponible")
-        cantidadReservada += cantidadAReservar
+        setCantidadReservada(cantidadReservada + cantidadAReservar)
     }
 
     void liberar(Integer cantidadALiberar)
     {
         if(cantidadALiberar > cantidadReservada()) throw new IllegalArgumentException("intentando liberar más cantidad que lo reservado")
-        cantidadReservada -= cantidadALiberar
+        setCantidadReservada(cantidadReservada - cantidadALiberar)
     }
 
     boolean estaVencido() {
@@ -43,7 +43,7 @@ class DisponibilidadRepuesto {
     }
 
     String toString(){
-        "DisponibilidadRepuesto {$id} -> $tipo.nombre x $cantidad (${cantidad - cantidadReservada} disponibles)"
+        "DisponibilidadRepuesto {$id} -> $tipo.nombre x $cantidad (${getCantidadDisponible()} disponibles)"
     }
 
 }

@@ -20,6 +20,10 @@
             <div class="message" role="status">${flash.message}</div>
             </g:if>
             <f:display bean="ordenDeTrabajo" />
+            <g:form action="prepararOT" params="[otId:"${ordenDeTrabajo.id}"]">
+                <g:actionSubmit action="prepararOT" value="Preparar" class="btn btn-danger pull-right" style="margin-top:10px;" />
+            </g:form>
+
             <g:form resource="${this.ordenDeTrabajo}" method="DELETE">
                 <fieldset class="buttons">
                     <g:link class="edit" action="edit" resource="${this.ordenDeTrabajo}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
