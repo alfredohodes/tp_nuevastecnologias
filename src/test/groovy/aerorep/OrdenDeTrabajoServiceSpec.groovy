@@ -21,6 +21,7 @@ class OrdenDeTrabajoServiceSpec extends Specification implements ServiceUnitTest
             disponibilidadRepuestoRepository:new DisponibilidadRepuestoRepository(),
             notificacionService:new NotificacionService()
         )
+        service.ordenDeTrabajoRepository = new OrdenDeTrabajoRepository()
 
         // Proveedor de tornillos
         new ProveedorRepuesto(cuit:"11-11111111-0", razonSocial: "VendeTornillo SRL").save()

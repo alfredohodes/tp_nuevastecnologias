@@ -23,6 +23,10 @@
             <div class="container-fluid">
               <ul class="nav navbar">
                 <li> <g:link action="prepararUS1_1">Preparar US 1.1</g:link></li>
+                <li> <g:link action="prepararUS1_2">Preparar US 1.2</g:link></li>
+                <li> <g:link action="prepararUS2">Preparar US 2</g:link></li>
+                <li> <g:link action="prepararUS3_1">Preparar US 3.1</g:link></li>
+                <li> <g:link action="prepararUS3_2">Preparar US 3.2</g:link></li>
               </ul>
             </div>
           </div>

@@ -8,11 +8,9 @@ class BootStrap {
 
         // Proveedor de tornillos
         ProveedorRepuesto provTornillos = new ProveedorRepuesto(cuit:"11-11111111-1", razonSocial: "VendeTornillo SRL").save(failOnError: true)
-        println  "provTornillos: " + provTornillos
 
         // Tipo repuesto: Tornillo
         TipoRepuesto tipoTornillo = new TipoRepuesto(nombre:"Tornillo", codigo:"TOR-1" + System.currentTimeMillis().toString(), cantidadAlertaStockMinimo:100).save(failOnError: true)
-        println "tipoTornillo: " + tipoTornillo
 
 
         // Compra de 100 tornillos a $2 cada uno, almacenados 70 en ubicación 1 y 30 en ubicación 2
@@ -39,12 +37,7 @@ class BootStrap {
 
         compra.save(failOnError: true)
 
-        println  "compra: " + compra
-        println  "detalleTornillos: " + detalleTornillos
-        println  "disponibilidadTornillos70: " + disponibilidadTornillos70
-        println  "disponibilidadTornillos30: " + disponibilidadTornillos30
 
-        
         // Orden de trabajo previa que requiere 40 tornillos ya reservados de disponibilidad 1
         OrdenDeTrabajo otPrevia = new OrdenDeTrabajo()
 
@@ -54,9 +47,6 @@ class BootStrap {
 
         disponibilidadRepuestoService.reservar(disponibilidadTornillos70.id, 40)
 
-        println "otPrevia: " + otPrevia
-        println "reqPrevioTornillos: " + reqPrevioTornillos
-
 
         // Orden de trabajo nueva que requiere 50 tornillos
         OrdenDeTrabajo otNueva = new OrdenDeTrabajo()
@@ -64,9 +54,6 @@ class BootStrap {
         RequerimientoRepuesto reqNuevoTornillos = new RequerimientoRepuesto(tipo:tipoTornillo, cantidad:50)
         otNueva.agregarRequerimiento(reqNuevoTornillos)
         otNueva.save(failOnError: true, flush:true)
-
-        println "otNueva: " + otNueva
-        println "reqNuevoTornillos: " + reqNuevoTornillos
     }
     
     def destroy = {

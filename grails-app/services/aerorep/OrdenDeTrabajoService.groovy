@@ -11,28 +11,23 @@ class OrdenDeTrabajoService {
     /*
         Reserva todos los repuestos requeridos para esta OT
     */
-    def prepararOT(Long id) {
-        OrdenDeTrabajo ot = OrdenDeTrabajo.get(id)
+    def prepararOT(Long otId) {
+        OrdenDeTrabajo ot = getOrdenDeTrabajoById(otId)
         ot.requerimientoRepuestos.each { requerimiento ->
 
             def disponibilidadesNoVencidasConCantidadesNoReservadas = disponibilidadRepuestoService.getDisponibilidadesLibresPorTipoOrdenadasPorVencimiento(requerimiento.tipo)
             
             // Inject para ir reservando repuestos disponibles ordenados por vencimiento. Acumulo la cant. que resta reservar
             def cantPendienteAReservar = requerimiento.getCantidadPendienteAReservar()
-            println "cantPendienteAReservar $cantPendienteAReservar"
             disponibilidadesNoVencidasConCantidadesNoReservadas.inject(cantPendienteAReservar) { cantPendiente, disponibilidad ->
-                println "cantLibreEnDispActual: ${disponibilidad.getCantidadDisponible()} || cantPendiente: $cantPendiente"
                 def cantAReservar = [disponibilidad.getCantidadDisponible(), cantPendiente].min()
-                println "disp: $disponibilidad || Cant: ${disponibilidad.getCantidadDisponible()}/$disponibilidad.cantidad || Pendiente: $cantPendiente || A reservar: $cantAReservar"
                 
                 if(cantAReservar > 0)
                 {
                     disponibilidadRepuestoService.reservar(disponibilidad.id, cantAReservar)
                     requerimiento.agregarReservaRepuesto(new ReservaRepuesto(cantidad:cantAReservar, disponibilidadRepuesto:disponibilidad))
                     def resultadoDeDispSave = disponibilidad.save(failOnError:true, flush:true)
-                    println "resultadoDeDispSave (1): $resultadoDeDispSave"
                 }
-                println "disp post reserva: $disponibilidad"
 
                 cantPendiente-cantAReservar
             }
@@ -41,13 +36,22 @@ class OrdenDeTrabajoService {
     }
 
     /*
+        Ejecuta la OT y devuelve una lista con las ubicaciones de los repuestos reservados
+    */
+    def ejecutarOT(Long otId) {
+        OrdenDeTrabajo ot = getOrdenDeTrabajoById(otId)
+        ot.ejecutar()
+        ot.save(flush:true)
+    }
+
+    /*
         El valor de una OT se calcula como el costo total de los repuestos más un porcentaje de ganancia sobre este monto
     */
     Dinero calcularValorOT(Long otId, Float porcentajeGanancia)
     {
-        OrdenDeTrabajo ot = OrdenDeTrabajo.get(otId)
-        Dinero costoRepuestos = ot.requerimientoRepuestos.sum { requerimiento -> 
-            requerimiento.reservasRepuestos.sum { reserva -> 
+        OrdenDeTrabajo ot = getOrdenDeTrabajoById(otId)
+        Dinero costoRepuestos = ot.requerimientoRepuestos.sum(new Dinero()) { requerimiento -> 
+            requerimiento.reservasRepuestos.sum(new Dinero()) { reserva -> 
                 Dinero precioRepuestoPorUnidad = disponibilidadRepuestoService.getPrecioPorUnidad(reserva.disponibilidadRepuesto.id)
                 precioRepuestoPorUnidad * reserva.cantidad
             }
@@ -55,8 +59,16 @@ class OrdenDeTrabajoService {
         costoRepuestos * (1 + porcentajeGanancia / 100)
     }
 
+    def getReservasRepuestosParaOT(Long otId) {
+        OrdenDeTrabajo ot = getOrdenDeTrabajoById(otId)
+        ot.requerimientoRepuestos.sum { requerimiento -> requerimiento.reservasRepuestos}
+    }
+
     def getAllOrdenesDeTrabajo() {
-        println "ordenDeTrabajoRepository $ordenDeTrabajoRepository"
         ordenDeTrabajoRepository.getAll()
+    }
+
+    def getOrdenDeTrabajoById(Long otId) {
+        ordenDeTrabajoRepository.getById(otId)
     }
 }

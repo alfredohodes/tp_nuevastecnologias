@@ -52,7 +52,6 @@ class RequerimientoRepuesto {
 
     void validarReserva(ReservaRepuesto reserva)
     {
-        println "Validando reserva..."
         if(reserva == null) throw new IllegalArgumentException("reserva es null")
         if(reserva.disponibilidadRepuesto == null) throw new IllegalArgumentException("reserva no tiene disponibilidad asignada")
         if(reserva.disponibilidadRepuesto.tipo != tipo) throw new IllegalArgumentException("reserva no es del tipo requerido")
@@ -68,6 +67,6 @@ class RequerimientoRepuesto {
 
 
   String toString() {
-    "RequerimientoRepuesto {$id} -> $tipo.nombre x $cantidad"
+    "{$id}: $tipo.nombre x $cantidad"
   }
 }

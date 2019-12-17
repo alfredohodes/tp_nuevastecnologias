@@ -18,11 +18,39 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${ordenDeTrabajoList}" />
 
-            <div class="pagination">
-                <g:paginate total="${ordenDeTrabajoCount ?: 0}" />
-            </div>
+            <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center">ID</th>
+								<th class="text-center">Estado</th>
+								<th class="text-center">Requerimientos</th>
+								<th class="text-center">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<g:each in="${ordenDeTrabajoList.sort { it.id  }}" var="ordenDeTrabajoInstance">
+								<tr>
+									<td class="text-center">${ordenDeTrabajoInstance.id}</td>
+									<td class="text-center">${ordenDeTrabajoInstance.estado}</td>
+                                    <td class="text-center">
+                                        <ul>
+                                            <g:each in="${ordenDeTrabajoInstance.requerimientoRepuestos.sort { it.id  }}" var="requerimientoRepuestoInstance">
+                                                <li>${requerimientoRepuestoInstance}</li>
+                                            </g:each>
+                                        </ul>
+                                    </td>
+                                    <td class="text-center">
+                                        <g:link class="info" action="show" resource="${ordenDeTrabajoInstance}">Ver</g:link>
+									</td>
+								</tr>
+							</g:each>
+						</tbody>
+					</table>
+				</div>
+			</div>
         </div>
     </body>
 </html>

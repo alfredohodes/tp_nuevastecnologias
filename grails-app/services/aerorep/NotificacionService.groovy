@@ -6,6 +6,6 @@ import grails.gorm.transactions.Transactional
 class NotificacionService {
 
     def notificar(String msj) {
-        println "Te notifico que $msj"
+        println "[NOTIFICACION] - $msj"
     }
 }

@@ -11,6 +11,6 @@ class ReservaRepuesto {
     }
 
     String toString(){
-      "ReservaRepuesto {$id} -> $disponibilidadRepuesto.tipo.nombre x $cantidad"
+      "{$id}: $disponibilidadRepuesto.tipo.nombre x $cantidad"
     }
 }

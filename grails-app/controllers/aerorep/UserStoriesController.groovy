@@ -4,6 +4,9 @@ class UserStoriesController {
 
     def index() { }
 
+    /*
+    reserva con repuestos suficientes
+    */
     def prepararUS1_1() {
 
         eliminarTodasLasComprasYOrdenesDeTrabajo()
@@ -18,6 +21,84 @@ class UserStoriesController {
         OrdenDeTrabajo ot = crearOTQueRequiereTornillos(10)
 
         flash.message = "US 1.1 preparada"
+        redirect(uri:'/')
+    }
+
+    /*
+    reserva con repuestos insuficientes
+    */
+    def prepararUS1_2() {
+
+        eliminarTodasLasComprasYOrdenesDeTrabajo()
+
+        //'Hay 5 tornillos disponibles'
+        crearCompraTornillos(5, new Dinero(99.99), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+        
+        //'La OT en preparación requiere 10 tornillos'
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(10)
+
+        flash.message = "US 1.2 preparada"
+        redirect(uri:'/')
+    }
+
+    /*
+    determinacion valor ot
+    */
+    def prepararUS2() {
+
+        eliminarTodasLasComprasYOrdenesDeTrabajo()
+
+        // 'Hay 10 tornillos comprados a 10 pesos cada uno'
+        crearCompraTornillos(10, new Dinero(100), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+        
+        //'La OT en preparación requiere 10 tornillos'
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(10)
+
+        flash.message = "US 2 preparada"
+        redirect(uri:'/')
+    }
+
+    /*
+    envía alerta stock mínimo
+    */
+    def prepararUS3_1() {
+
+        eliminarTodasLasComprasYOrdenesDeTrabajo()
+
+        // 'El stock mínimo para alerta de Tornillos es de 1000 unidades'
+        TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
+        tipoTornillo.cantidadAlertaStockMinimo = 1000
+        tipoTornillo.save()
+
+        // 'Hay 1050 tornillos disponibles'
+        crearCompraTornillos(1050, new Dinero(10500), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+
+        // 'La OT en preparación requiere 100 tornillos'
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(100)
+
+        flash.message = "US 3.1 preparada"
+        redirect(uri:'/')
+    }
+
+    /*
+    no envía alerta stock mínimo por ya estar por debajo inicialmente
+    */
+    def prepararUS3_2() {
+
+        eliminarTodasLasComprasYOrdenesDeTrabajo()
+
+        // 'El stock mínimo para alerta de Tornillos es de 1000 unidades'
+        TipoRepuesto tipoTornillo = TipoRepuesto.get(1)
+        tipoTornillo.cantidadAlertaStockMinimo = 1000
+        tipoTornillo.save()
+
+        // 'Hay 900 tornillos disponibles'
+        crearCompraTornillos(900, new Dinero(9000), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+
+        // 'La OT en preparación requiere 100 tornillos'
+        OrdenDeTrabajo ot = crearOTQueRequiereTornillos(100)
+
+        flash.message = "US 3.2 preparada"
         redirect(uri:'/')
     }
 

@@ -35,7 +35,7 @@ class OrdenDeTrabajo {
     }
 
     boolean puedeSerEjecutada() {
-        requerimientoRepuestos.every { req -> req.estaCumplido() }
+        estado != Estado.EJECUTADA && requerimientoRepuestos.every { req -> req.estaCumplido() }
     }
 
     /*
@@ -48,10 +48,12 @@ class OrdenDeTrabajo {
         // TODO: Setear estado EJECUTADA
 
         // TODO: Devolver lista de repuestos necesarios y sus ubicaciones en el depósito
+        setEstado(Estado.EJECUTADA)
     }
     
 
-    String toString(){
-        "OT {$id} -> $estado"
+    String toString() {
+
+        "OT {$id}"
     }
 }

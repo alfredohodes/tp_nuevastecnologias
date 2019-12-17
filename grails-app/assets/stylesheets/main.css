@@ -575,6 +575,10 @@ th:hover, tr:hover {
     background-image: url(../images/skin/database_save.png);
 }
 
+.buttons .info {
+    background-image: url(../images/skin/information.png);
+}
+
 a.skip {
     position: absolute;
     left: -9999px;

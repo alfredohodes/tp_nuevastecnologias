@@ -22,9 +22,8 @@ class DisponibilidadRepuestoService {
         // Notifica stock mínimo
         Integer cantidadAlertaStockMinimo = disponibilidad.tipo.cantidadAlertaStockMinimo
         Integer cantidadLibrePostReserva = getCantidadDisponibleLibrePorTipo(disponibilidad.tipo)
-        println "cantidadAlertaStockMinimo $cantidadAlertaStockMinimo - cantidadLibrePostReserva $cantidadLibrePostReserva"
         if(cantidadLibrePostReserva <= cantidadAlertaStockMinimo && (cantidadLibrePostReserva + cantReserva) > cantidadAlertaStockMinimo) {
-            notificacionService.notificar("Compre, compre")
+            notificacionService.notificar("Alerta de stock minimo. Repuesto $disponibilidad.tipo.nombre tiene stock $cantidadLibrePostReserva. Se encuentra por debajo del minimo ($cantidadAlertaStockMinimo unidades)")
         }
     }
 
@@ -35,7 +34,6 @@ class DisponibilidadRepuestoService {
                 eq('id', disponibilidadId)
             }
         }
-        println "detalleCompra $detalleCompra"
         detalleCompra.getPrecioPorUnidad()
     }
 
