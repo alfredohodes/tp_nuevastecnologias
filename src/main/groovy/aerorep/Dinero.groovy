@@ -30,4 +30,8 @@ class Dinero {
   def multiply(Integer multInt) {
     new Dinero(this.monto * multInt)
   }
+
+    String toString(){
+        "ARS ${String.format("%.2f", monto)}"
+    }
 }

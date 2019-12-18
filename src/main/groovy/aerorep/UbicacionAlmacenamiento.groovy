@@ -21,4 +21,8 @@ class UbicacionAlmacenamiento {
         this.estanteria = estanteria
         this.espacio    = espacio
     }
+
+    String toString(){
+        "DEP: $deposito | ZONA: $zona | ESTANT: $estanteria | ESP: $espacio"
+    }
 }

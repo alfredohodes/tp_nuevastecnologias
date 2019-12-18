@@ -17,8 +17,15 @@ class DetalleCompraRepuesto {
   }
 
   Dinero getPrecioPorUnidad() {
-    Integer cantTotalRepuestos = repuestos.cantidad.sum()
-    precio / cantTotalRepuestos
+    precio / getCantidadTotalRepuestos()
+  }
+
+  Integer getCantidadTotalRepuestos() {
+    repuestos.cantidad.sum()
+  }
+
+  TipoRepuesto getTipoRepuesto() {
+    repuestos.first().tipo
   }
 
   void agregarDisponibilidadRepuesto(DisponibilidadRepuesto repuesto) {

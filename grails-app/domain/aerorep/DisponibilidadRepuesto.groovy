@@ -43,7 +43,7 @@ class DisponibilidadRepuesto {
     }
 
     String toString(){
-        "DisponibilidadRepuesto {$id} -> $tipo.nombre x $cantidad (${getCantidadDisponible()} disponibles)"
+        "{$id} -> $tipo.nombre x $cantidad (${getCantidadDisponible()} disponibles)"
     }
 
 }

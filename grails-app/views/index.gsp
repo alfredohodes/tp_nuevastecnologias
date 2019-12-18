@@ -21,9 +21,9 @@
           <div class="navbar navbar-horizontal">
             <div class="container-fluid">
               <ul class="nav navbar-horizontal">
-                <li> <g:link controller="ordenDeTrabajo" action="index">Ordenes de trabajo</g:link></li>
-                <li> <g:link controller="compraRepuesto" action="index">Compras</g:link></li>
-                <li> <g:link controller="userStories" action="index">User Stories</g:link></li>
+                <li class="nav-tabs"><h1><g:link controller="ordenDeTrabajo" action="index">Ordenes de trabajo</g:link></h1></li>
+                <li class="nav-tabs"><h1><g:link controller="compraRepuesto" action="index">Compras</g:link></h1></li>
+                <li class="nav-tabs"><h1><g:link controller="userStories" action="index">User Stories</g:link></h1></li>
               </ul>
             </div>
           </div>

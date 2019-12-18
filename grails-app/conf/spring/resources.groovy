@@ -8,4 +8,6 @@ beans = {
 
     ordenDeTrabajoRepository(aerorep.OrdenDeTrabajoRepository)
     disponibilidadRepuestoRepository(aerorep.DisponibilidadRepuestoRepository)
+    compraRepuestoRepository(aerorep.CompraRepuestoRepository)
+    detalleCompraRepuestoRepository(aerorep.DetalleCompraRepuestoRepository)
 }

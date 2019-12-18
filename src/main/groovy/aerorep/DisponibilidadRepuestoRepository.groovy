@@ -2,10 +2,7 @@ package aerorep
 
 class DisponibilidadRepuestoRepository {
 
-    DisponibilidadRepuestoRepository()
-    {
-
-    }
+    DisponibilidadRepuestoRepository() {}
 
     
     DisponibilidadRepuesto getById(Long id) {

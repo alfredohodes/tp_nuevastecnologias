@@ -35,7 +35,7 @@
                             <tr>
                                 <th scope="row">Requerimientos repuestos</th>
                                 <td>
-                                    <ul>
+                                    <ul class="list-inline">
                                         <g:each in="${ordenDeTrabajo.requerimientoRepuestos.sort { it.id  }}" var="requerimientoRepuestoInstance">
                                             <li>
                                                 <g:link class="show" action="show" resource="${requerimientoRepuestoInstance}">
@@ -49,7 +49,7 @@
                             <tr>
                                 <th scope="row">Reservas repuestos</th>
                                 <td>
-                                    <ul>
+                                    <ul class="list-inline">
                                         <g:each in="${reservasRepuestos.sort { it.id  }}" var="reservaRepuestoInstance">
                                             <li>
                                                 <g:link class="show" action="show" resource="${reservaRepuestoInstance}">
@@ -63,7 +63,7 @@
                             <g:if test="${puedeSerEjecutada}">
                                 <tr>
                                     <th scope="row">Valor OT (30% ganancia)</th>
-                                    <td>$ ${valorOT.monto}</td>
+                                    <td><g:formatNumber number="${valorOT.monto}" type="currency" currencyCode="ARS"/></td>
                                 </tr>
                             </g:if>
                         </tbody>

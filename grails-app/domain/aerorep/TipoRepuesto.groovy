@@ -14,7 +14,7 @@ class TipoRepuesto {
     }
 
   String toString(){
-    "Tipo {$id} -> $nombre"
+    "{$id} -> $nombre"
   }
 
 }

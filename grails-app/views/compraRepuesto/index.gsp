@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'compraRepuesto.label', default: 'CompraRepuesto')}" />
+        <g:set var="entityName" value="${message(code: 'compraRepuesto.label', default: 'Compra Repuesto')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -18,11 +18,32 @@
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <f:table collection="${compraRepuestoList}" />
-
-            <div class="pagination">
-                <g:paginate total="${compraRepuestoCount ?: 0}" />
-            </div>
+            <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center">ID</th>
+								<th class="text-center">Fecha</th>
+								<th class="text-center">Proveedor</th>
+								<th class="text-center">Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<g:each in="${compraRepuestoList.sort { it.id  }}" var="compraRepuestoInstance">
+								<tr>
+									<td class="text-center">${compraRepuestoInstance.id}</td>
+									<td class="text-center"><g:formatDate format="dd/MM/yyyy" date="${compraRepuestoInstance.fecha}"/></td>
+									<td class="text-center">${compraRepuestoInstance.proveedor}</td>
+                                    <td class="text-center">
+                                        <g:link class="info" action="show" resource="${compraRepuestoInstance}">Ver</g:link>
+									</td>
+								</tr>
+							</g:each>
+						</tbody>
+					</table>
+				</div>
+			</div>
         </div>
     </body>
 </html>

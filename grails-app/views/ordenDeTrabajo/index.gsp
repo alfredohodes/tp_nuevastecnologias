@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'ordenDeTrabajo.label', default: 'OrdenDeTrabajo')}" />
+        <g:set var="entityName" value="${message(code: 'ordenDeTrabajo.label', default: 'Orden De Trabajo')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -36,7 +36,7 @@
 									<td class="text-center">${ordenDeTrabajoInstance.id}</td>
 									<td class="text-center">${ordenDeTrabajoInstance.estado}</td>
                                     <td class="text-center">
-                                        <ul>
+                                        <ul class="list-inline">
                                             <g:each in="${ordenDeTrabajoInstance.requerimientoRepuestos.sort { it.id  }}" var="requerimientoRepuestoInstance">
                                                 <li>${requerimientoRepuestoInstance}</li>
                                             </g:each>

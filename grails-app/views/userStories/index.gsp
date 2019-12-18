@@ -8,7 +8,7 @@
 <body>
   <div class="container">
   
-      <h1>USER STORIES</h1>
+      <h1 class="text-center">USER STORIES</h1>
       <g:if test="${flash.message}">
         <div class="row">
           <div class="col-md-12">
@@ -22,11 +22,11 @@
           <div class="navbar navbar">
             <div class="container-fluid">
               <ul class="nav navbar">
-                <li> <g:link action="prepararUS1_1">Preparar US 1.1</g:link></li>
-                <li> <g:link action="prepararUS1_2">Preparar US 1.2</g:link></li>
-                <li> <g:link action="prepararUS2">Preparar US 2</g:link></li>
-                <li> <g:link action="prepararUS3_1">Preparar US 3.1</g:link></li>
-                <li> <g:link action="prepararUS3_2">Preparar US 3.2</g:link></li>
+                <li class="nav-tabs"><h4><g:link action="prepararUS1_1">Preparar US 1.1</g:link></h4></li>
+                <li class="nav-tabs"><h4><g:link action="prepararUS1_2">Preparar US 1.2</g:link></h4></li>
+                <li class="nav-tabs"><h4><g:link action="prepararUS2">Preparar US 2</g:link></h4></li>
+                <li class="nav-tabs"><h4><g:link action="prepararUS3_1">Preparar US 3.1</g:link></h4></li>
+                <li class="nav-tabs"><h4><g:link action="prepararUS3_2">Preparar US 3.2</g:link></h4></li>
               </ul>
             </div>
           </div>
