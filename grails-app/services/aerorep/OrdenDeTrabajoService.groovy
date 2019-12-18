@@ -42,6 +42,8 @@ class OrdenDeTrabajoService {
         OrdenDeTrabajo ot = getOrdenDeTrabajoById(otId)
         ot.ejecutar()
         ot.save(flush:true)
+
+        getReservasRepuestosParaOT(otId)
     }
 
     /*

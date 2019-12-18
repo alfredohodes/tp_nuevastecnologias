@@ -32,13 +32,6 @@ class RequerimientoRepuesto {
         reservasRepuestos -= reserva
     }
 
-    void quitarReservaRepuestos() {
-
-        // TODO: No permitir si OT tiene estado EJECUTADA
-
-        // TODO: Quitar el repuesto de la lista de repuestos asignados.
-    }
-
     /**
         Valida que todos los repuestos requeridos estén reservados y que ninguna reserva contenga repuestos vencidos
     */

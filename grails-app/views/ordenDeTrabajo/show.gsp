@@ -75,13 +75,22 @@
                         </g:form>
                     </g:if>
                     <g:elseif test="${estaEjecutada}">
-                        OT ya ejecutada
+                        <h3>LISTADO DE REPUESTOS A USAR</h3>
+                        <g:each in="${reservasRepuestos.sort { it.id  }}" var="reservaRepuestoInstance">
+                            <li>
+                                ${reservaRepuestoInstance.disponibilidadRepuesto.tipo.nombre} x ${reservaRepuestoInstance.cantidad} - Ubicación: 
+                                ${reservaRepuestoInstance.disponibilidadRepuesto.ubicacion}
+                            </li>
+                        </g:each>
+
+
                     </g:elseif>
                     <g:else>
                         <g:form action="prepararOT" params="[otId:"${ordenDeTrabajo.id}"]">
                             <g:actionSubmit action="prepararOT" value="Preparar" class="btn btn-warning pull-right" style="margin-top:10px;" />
                         </g:form>
                     </g:else>
+
 
 
 				</div>

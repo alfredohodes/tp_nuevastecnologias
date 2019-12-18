@@ -18,9 +18,9 @@ class OrdenDeTrabajoController {
     }
 
     def ejecutarOT(Long otId) {
-        ordenDeTrabajoService.ejecutarOT(otId)
+        def resultado = ordenDeTrabajoService.ejecutarOT(otId)
         flash.message = "OT $otId Ejecutada"
-        redirect(action:'show', params:[id:otId])
+        redirect(action:'show', params:[id:otId, reservas:resultado])
     }
 
     def index() {

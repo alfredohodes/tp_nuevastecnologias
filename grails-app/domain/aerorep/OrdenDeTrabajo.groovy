@@ -43,12 +43,13 @@ class OrdenDeTrabajo {
     */
     void ejecutar()
     {
-        // TODO: Revisar si puedeSerEjecutada(). Si no -> Exception
-
-        // TODO: Setear estado EJECUTADA
+        // Podría llamar a puedeSerEjecutada() pero de esta manera se tienen excepciones más descriptivas
+        if(estado ==  Estado.EJECUTADA) throw new IllegalStateException("la ot ya se encuentra ejecutada")
+        if(!requerimientoRepuestos.every { req -> req.estaCumplido() }) throw new IllegalStateException("hay requerimientos de repuestos sin disponibilidad reservada")
+        
+        setEstado(Estado.EJECUTADA)
 
         // TODO: Devolver lista de repuestos necesarios y sus ubicaciones en el depósito
-        setEstado(Estado.EJECUTADA)
     }
     
 
