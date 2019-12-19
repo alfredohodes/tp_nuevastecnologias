@@ -24,16 +24,6 @@ class OrdenDeTrabajo {
         requerimientoRepuestos << requerimiento
     }
 
-    void agregarReservaRepuesto(ReservaRepuesto reservaRepuesto) {
-
-        if(estado ==  Estado.EJECUTADA) throw new IllegalStateException("no se pueden modificar requerimientos en una ot ejecutada")
-
-        def requerimiento = requerimientoRepuestos.find{ req -> req.tipo == reservaRepuesto.disponibilidadRepuesto.tipo }
-        if(!requerimiento) throw new IllegalArgumentException("se intenta agregar una reserva de un tipo para el que no hay requerimiento")
-
-        requerimiento.agregarReservaRepuesto(reservaRepuesto)
-    }
-
     boolean puedeSerEjecutada() {
         estado != Estado.EJECUTADA && requerimientoRepuestos.every { req -> req.estaCumplido() }
     }
@@ -48,8 +38,6 @@ class OrdenDeTrabajo {
         if(!requerimientoRepuestos.every { req -> req.estaCumplido() }) throw new IllegalStateException("hay requerimientos de repuestos sin disponibilidad reservada")
         
         setEstado(Estado.EJECUTADA)
-
-        // TODO: Devolver lista de repuestos necesarios y sus ubicaciones en el depósito
     }
     
 
