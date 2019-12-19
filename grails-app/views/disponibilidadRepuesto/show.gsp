@@ -2,20 +2,18 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'disponibilidadRepuesto.label', default: 'DisponibilidadRepuesto')}" />
-        <title><g:message code="default.show.label" args="[entityName]" /></title>
+        <title>Disponibilidad Repuesto</title>
     </head>
     <body>
         <a href="#show-disponibilidadRepuesto" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
         <div class="nav" role="navigation">
             <ul>
                 <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+                <li><a href="#" onclick="javascript:window.history.back();">Volver</a></li>
             </ul>
         </div>
         <div id="show-disponibilidadRepuesto" class="content scaffold-show" role="main">
-            <h1><g:message code="default.show.label" args="[entityName]" /></h1>
+            <h1>Disponibilidad Repuesto</h1>
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -30,7 +28,11 @@
                             </tr>
                             <tr>
                                 <th scope="row">Tipo</th>
-                                <td>${disponibilidadRepuesto.tipo.nombre}</td>
+                                <td>
+                                    <g:link class="show" action="show" resource="${disponibilidadRepuesto.tipo}">
+                                        ${disponibilidadRepuesto.tipo.nombre}
+                                    </g:link>
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">Cantidad Total</th>
@@ -54,7 +56,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">Fecha de vencimiento</th>
-								<td class="text-center"><g:formatDate format="dd/MM/yyyy" date="${disponibilidadRepuesto.vencimiento}"/></td>
+								<td><g:formatDate format="dd/MM/yyyy" date="${disponibilidadRepuesto.vencimiento}"/></td>
                             </tr>
                             <tr>
                                 <th scope="row">Ubicacion</th>

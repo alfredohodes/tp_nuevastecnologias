@@ -8,7 +8,7 @@
 <body>
   <div class="container">
   
-      <h1 class="text-center">USER STORIES</h1>
+      <h1 class="text-center">Historias de usuario</h1>
       <g:if test="${flash.message}">
         <div class="row">
           <div class="col-md-12">

@@ -60,6 +60,9 @@ class RequerimientoRepuesto {
 
 
   String toString() {
-    "{$id}: $tipo.nombre x $cantidad"
+    if(tipo != null)
+        "{$id}: $tipo.nombre x $cantidad"
+    else
+        "{$id}"
   }
 }

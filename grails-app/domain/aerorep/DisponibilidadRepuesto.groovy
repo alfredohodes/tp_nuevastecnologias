@@ -43,7 +43,7 @@ class DisponibilidadRepuesto {
     }
 
     String toString(){
-        "{$id} -> $tipo.nombre x $cantidad (${getCantidadDisponible()} disponibles)"
+        "{$id} -> $tipo.nombre x $cantidad (${getCantidadDisponible()} libres) - Vto: ${vencimiento.format('dd/MM/yyyy')}"
     }
 
 }

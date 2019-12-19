@@ -2,20 +2,18 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="Orden de Trabajo: ${ordenDeTrabajo.id}" />
-        <title><g:message code="default.show.label" args="[entityName]" /></title>
+        <title>Orden de Trabajo</title>
     </head>
     <body>
         <a href="#show-ordenDeTrabajo" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
         <div class="nav" role="navigation">
             <ul>
                 <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+                <li><g:link class="list" action="index">Órdenes de Trabajo</g:link></li>
             </ul>
         </div>
         <div id="show-ordenDeTrabajo" class="content scaffold-show" role="main">
-            <h1><g:message code="default.show.label" args="[entityName]" /></h1>
+            <h1>Orden de Trabajo</h1>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -46,33 +44,43 @@
                                     </ul>
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row">Reservas repuestos</th>
-                                <td>
-                                    <ul class="list-inline">
-                                        <g:each in="${reservasRepuestos.sort { it.id  }}" var="reservaRepuestoInstance">
-                                            <li>
-                                                <g:link class="show" action="show" resource="${reservaRepuestoInstance}">
-                                                     ${reservaRepuestoInstance}
-                                                </g:link>
-                                            </li>
-                                        </g:each>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <g:if test="${puedeSerEjecutada}">
+                            <g:if test="${reservasRepuestos}">
                                 <tr>
-                                    <th scope="row">Valor OT (30% ganancia)</th>
-                                    <td><g:formatNumber number="${valorOT.monto}" type="currency" currencyCode="ARS"/></td>
+                                    <th scope="row">Reservas repuestos</th>
+                                    <td>
+                                        <ul class="list-inline">
+                                            <g:each in="${reservasRepuestos.sort { it.id  }}" var="reservaRepuestoInstance">
+                                                <li>
+                                                    <g:link class="show" action="show" resource="${reservaRepuestoInstance}">
+                                                        ${reservaRepuestoInstance}
+                                                    </g:link>
+                                                </li>
+                                            </g:each>
+                                        </ul>
+                                    </td>
                                 </tr>
+                                <g:if test="${puedeSerEjecutada}">
+                                    <tr>
+                                        <th scope="row">Valor OT (30% ganancia)</th>
+                                        <td><g:formatNumber number="${valorOT.monto}" type="currency" currencyCode="ARS"/></td>
+                                    </tr>
+                                </g:if>
                             </g:if>
+
                         </tbody>
 					</table>
                     
                     <g:if test="${puedeSerEjecutada}">
-                        <g:form action="ejecutarOT" params="[otId:"${ordenDeTrabajo.id}"]">
-                            <g:actionSubmit action="ejecutarOT" value="Ejecutar" class="btn btn-success pull-right" style="margin-top:10px;" />
-                        </g:form>
+                    
+                        <div class="nav" role="navigation">
+                            <ul class="m-auto">
+                                <li>
+                                    <g:form action="ejecutarOT" params="[otId:"${ordenDeTrabajo.id}"]">
+                                        <g:actionSubmit action="ejecutarOT" value="Ejecutar" class="btn btn-success pull-right" style="margin:auto;" />
+                                    </g:form>
+                                </li>
+                            </ul>
+                        </div>
                     </g:if>
                     <g:elseif test="${estaEjecutada}">
                         <h3>LISTADO DE REPUESTOS A USAR</h3>
@@ -86,9 +94,16 @@
 
                     </g:elseif>
                     <g:else>
-                        <g:form action="prepararOT" params="[otId:"${ordenDeTrabajo.id}"]">
-                            <g:actionSubmit action="prepararOT" value="Preparar" class="btn btn-warning pull-right" style="margin-top:10px;" />
-                        </g:form>
+                        <div class="nav" role="navigation">
+                            <ul class="m-auto">
+                                <li>
+                                    <g:form action="prepararOT" params="[otId:"${ordenDeTrabajo.id}"]">
+                                        <g:actionSubmit action="prepararOT" value="Preparar" class="btn btn-warning pull-right" style="margin-top:10px;" />
+                                    </g:form>
+                                </li>
+                            </ul>
+                        </div>
+
                     </g:else>
 
 
