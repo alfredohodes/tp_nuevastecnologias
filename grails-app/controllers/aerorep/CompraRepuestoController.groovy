@@ -32,7 +32,7 @@ class CompraRepuestoController {
         }
 
         String toString(){
-            "{$detalleCompraRepuestoInstance.id} -> $tipo.nombre x $cantidadTotalDetalle ($detalleCompraRepuestoInstance.precio.monto)"
+            "{$detalleCompraRepuestoInstance.id} -> $tipo.nombre x $cantidadTotalDetalle ($detalleCompraRepuestoInstance.precio)"
         }
      }
 }
