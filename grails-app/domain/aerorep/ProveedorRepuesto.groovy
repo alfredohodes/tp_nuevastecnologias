@@ -10,6 +10,6 @@ class ProveedorRepuesto {
     }
 
     String toString(){
-       "{$id} -> " + razonSocial
+       razonSocial
     }
 }
