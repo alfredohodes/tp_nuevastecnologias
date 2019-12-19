@@ -92,8 +92,8 @@ class UserStoriesController {
         tipoTornillo.cantidadAlertaStockMinimo = 1000
         tipoTornillo.save()
 
-        // 'Hay 900 tornillos disponibles'
-        crearCompraTornillos(900, new Dinero(9000), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
+        // 'Hay 950 tornillos disponibles'
+        crearCompraTornillos(950, new Dinero(9500), new Date().plus(30), "LOTE-X10", new UbicacionAlmacenamiento(deposito:"Dep 1", zona:"Zona 1", estanteria:"Est 1", espacio:"Esp 1"))
 
         // 'La OT en preparación requiere 100 tornillos'
         OrdenDeTrabajo ot = crearOTQueRequiereTornillos(100)
